@@ -7,7 +7,7 @@ import { AppDispatch } from "@/store/store";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "@/store/auth-slice";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthRegister() {
   const [role, setRole] = useState<"user" | "organization">("user");
@@ -18,7 +18,7 @@ export default function AuthRegister() {
 
   const dispatch: AppDispatch = useDispatch();
   const { toast } = useToast();
-
+  const navigate = useNavigate();
   const formControls = getRegisterFormControls(role);
 
   const handleRoleChange = (selectedRole: "user" | "organization") => {
@@ -57,19 +57,14 @@ export default function AuthRegister() {
       });
       return;
     }
-    console.log("Final FormData contents:");
-    for (const pair of formDataWithImage.entries()) {
-      console.log(pair[0], pair[1]);
-    }
 
     dispatch(registerUser(formDataWithImage)).then((data) => {
       if (data?.payload?.success) {
+        navigate("/auth/login");
+        window.location.reload();
         toast({
           title: data?.payload?.message || "Registration successful",
         });
-        setTimeout(() => {
-          <Navigate to={"/auth/login"} />;
-        }, 1000);
       } else {
         toast({
           title: data?.payload?.message || "Registration failed",
