@@ -78,7 +78,7 @@ const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
     );
   };
 
-  const displayedComments = comments.slice(0, visibleComments);
+  const displayedComments = [...comments].reverse().slice(0, visibleComments);
 
   console.log(displayedComments);
 
