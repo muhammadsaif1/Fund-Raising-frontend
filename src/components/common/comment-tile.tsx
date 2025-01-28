@@ -24,6 +24,7 @@ interface CommentsTileProps {
   onClose: () => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
   const { comments, isLoading } = useSelector(
@@ -35,7 +36,7 @@ const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    dispatch(fetchComments(post._id));
+    dispatch(fetchComments(post._id || ""));
   }, [dispatch, post._id]);
 
   const handleSeeMore = () => {
@@ -51,8 +52,8 @@ const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
     if (editingCommentId && editingText) {
       dispatch(
         updateComment({
-          postId: post._id,
-          userId: user._id,
+          postId: post._id || "",
+          userId: user._id || "",
           commentId: editingCommentId,
           text: editingText,
         })
@@ -64,7 +65,7 @@ const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
   };
 
   const handleDeleteClick = (commentId: string) => {
-    dispatch(deleteComment({ userId: user._id, commentId }));
+    dispatch(deleteComment({ userId: user._id || "", commentId }));
     toast({ title: "Comment deleted successfully", variant: "destructive" });
   };
 
@@ -140,7 +141,7 @@ const CommentsTile: React.FC<CommentsTileProps> = ({ post, user, onClose }) => {
                   <>
                     <IconButton
                       onClick={() =>
-                        handleEditClick(comment._id!, comment.commentText!)
+                        handleEditClick(comment._id!, comment.text!)
                       }
                     >
                       <Edit />
